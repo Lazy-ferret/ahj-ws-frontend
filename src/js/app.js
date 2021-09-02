@@ -30,7 +30,6 @@ class App {
     this.user = this.loginInput.value;
     this.ws.send(JSON.stringify({ login: this.loginInput.value }));
     this.loginInput.value = '';
-    this.getChat();
   }
 
   drawUsers(user) {
@@ -58,6 +57,8 @@ class App {
     if (nick === user) {
       classname = ' you';
       login = 'You';
+    } else if (nick === 'Chat Bot') {
+      classname = ' bot';
     }
     this.chat.innerHTML += `
       <div class="message${classname}">
@@ -73,10 +74,6 @@ class App {
     this.messageInput.value = '';
   }
 
-  getChat() {
-    this.ws.send(JSON.stringify({ messagesList: true }));
-  }
-
   wsConnect() {
     this.ws = new WebSocket(this.url);
     const { ws } = this;
@@ -85,25 +82,34 @@ class App {
     ws.addEventListener('open', () => {
       console.log('connection opened');
     });
+
     ws.addEventListener('close', () => {
       console.log('connection closed');
     });
+
     ws.addEventListener('message', (e) => {
       const response = JSON.parse(e.data);
-      if (!response) this.changeName();
-      else if (!response[0].msg) {
+      if (!response) {
+        this.changeName();
+      } else {
         this.usersListContainer.classList.remove('hidden');
         this.chatContainer.classList.remove('hidden');
-        this.usersList.innerHTML = '';
-        response.forEach((user) => {
-          this.drawUsers(user.name);
-        });
         this.nameChecked();
-      } else if (response[0].msg) {
-        this.chat.innerHTML = '';
-        response.forEach((msg) => {
-          this.drawMessagesList(msg.nickname, msg.msg, msg.date, this.user);
-        });
+        if (response.users && response.messages) {
+          this.chat.innerHTML = '';
+          this.usersList.innerHTML = '';
+          response.messages.forEach((msg) => {
+            this.drawMessagesList(msg.nickname, msg.msg, msg.date, this.user);
+          });
+          response.users.forEach((user) => {
+            this.drawUsers(user.name);
+          });
+        } else if (response[0].msg) {
+          this.chat.innerHTML = '';
+          response.forEach((msg) => {
+            this.drawMessagesList(msg.nickname, msg.msg, msg.date, this.user);
+          });
+        }
       }
     });
   }

@@ -108,13 +108,22 @@ border-radius: 0.2rem;
   margin-left: auto;
 }
 
+.message.bot {
+  text-align: center;
+  color: orangered;
+  background-color: #babcc2;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 80%;
+}
+
 .you span {
   color: orangered;
 }
 
 .message-form {
-width: 100%;
-position: relative;
+  width: 100%;
+  position: relative;
 }
 
 .message-input {
@@ -127,14 +136,14 @@ position: relative;
 }
 
 .message-send {
-position: absolute;
-z-index: 999;
-right: 0;
-top:0;
-height: 100%;
-background-color:#6fbced;
-color: wheat;
-font-weight: bold;
+  position: absolute;
+  z-index: 999;
+  right: 0;
+  top:0;
+  height: 100%;
+  background-color:#6fbced;
+  color: wheat;
+  font-weight: bold;
 }
 
 .hidden {
@@ -143,4 +152,30 @@ font-weight: bold;
 
 .invalid {
   border: 1px solid red;
+}
+
+/*MOBILE VERSION*/
+
+@media (max-width: 500px) {
+  .app-container {
+    width: 100%;
+    
+  }
+
+  .chat-container {
+    width: 70%;
+  }
+
+  .login-container {
+    margin: 0 auto;
+    max-width: 100vw;
+  }
+
+  .users {
+    width: 28%;
+  }
+
+  .users-list {
+    padding-left: 0.5rem;
+  }
 }
